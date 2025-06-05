@@ -1,0 +1,188 @@
+Cahier des Charges : Application de Gestion de Parc Informatique
+Version : 2.0 Date : 19 mai 2025
+
+1. Introduction
+L’application a pour objectif de centraliser la gestion du parc informatique, en intégrant la gestion des utilisateurs, équipements, tickets et inventaire IT, tout en garantissant sécurité et efficacité.
+
+Stack Technique :
+Frontend : React.js + TypeScript
+
+Backend : Node.js/Express.js ou NestJS
+
+Base de données : PostgreSQL 
+
+Cache : Redis (pour optimisation des performances)
+
+2. Exigences Fonctionnelles
+2.1 Structure du Menu
+L’application sera organisée autour des modules suivants :
+
+Tableau de Bord
+
+Statistiques générales du parc informatique
+
+Graphiques interactifs sur les équipements et les tickets
+
+Notifications des actions importantes
+
+Gestion des Utilisateurs
+
+Liste interactive avec recherche avancée
+
+Ajout, modification et suppression des comptes
+
+Attribution des rôles et permissions
+
+Intégration Active Directory
+
+Gestion des Employés
+
+Liste complète des employés avec leurs informations
+
+Association aux équipes et services
+
+Consultation des équipements affectés
+
+Gestion des Équipements
+
+Vue catalogue avec filtres par type et statut
+
+Ajout/modification des équipements
+
+Historique des modifications
+
+Import/export CSV
+
+Assignation automatique des équipements aux employés
+
+Système de Tickets
+
+Création et gestion des tickets
+
+Attribution automatique aux techniciens
+
+Suivi en temps réel avec WebSocket
+
+Workflow : Ouvert → Assigné → En cours → Résolu → Clôturé
+
+Chatbot interne pour aider à la résolution des tickets courants
+
+Inventaire & Cartographie
+
+Assignation des équipements (assignTo) à un employé
+
+Liste des équipements avec statistiques détaillées
+
+Exportation des rapports en PDF et Excel
+
+Licences & Sécurité
+
+Suivi des licences logicielles (Microsoft, Adobe, Antivirus, etc.)
+
+Alertes avant expiration des abonnements
+
+Détection des connexions suspectes
+
+Scan automatique des équipements pour détecter les failles de sécurité
+
+Paramètres & Personnalisation
+
+Mode clair/sombre et préférences utilisateur
+
+Intégration SSO (Single Sign-On)
+
+3. Modèles de Données
+3.1 Modèle Utilisateur
+typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: "admin" | "technicien" | "utilisateur";
+  team?: string;
+  createdAt: Date;
+}
+3.2 Modèle Employé
+typescript
+interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  department: string;
+  position: string;
+  assignedEquipments: Equipment[];
+  createdAt: Date;
+}
+3.3 Modèle Équipement
+typescript
+interface Equipment {
+  id: string;
+  type: "ordinateur" | "serveur" | "périphérique";
+  model: string;
+  serialNumber: string;
+  purchaseDate: Date;
+  status: "en service" | "en maintenance" | "hors service";
+  assignedTo?: string;
+  history: Array<{ updatedBy: string; date: Date; changes: string }>;
+}
+3.4 Modèle Ticket
+typescript
+interface Ticket {
+  id: string;
+  title: string;
+  description: string;
+  createdBy: string;
+  assignedTo?: string;
+  status: "ouvert" | "assigné" | "en cours" | "résolu" | "clôturé";
+  priority: "basse" | "moyenne" | "haute";
+  createdAt: Date;
+  updatedAt?: Date;
+}
+3.5 Modèle Inventaire
+Ajout du champ assignTo pour assigner un équipement à un employé.
+
+typescript
+interface Inventory {
+  id: string;
+  equipmentId: string;
+  assignedTo?: string;
+  location: string;
+  lastChecked: Date;
+  condition: "fonctionnel" | "défectueux";
+}
+4. Spécifications Techniques
+4.1 Frontend (React.js)
+Technologies utilisées :
+
+UI Framework : Material-UI ou Chakra UI
+
+Validation des formulaires : React Hook Form + Yup
+
+Exemple de composant pour afficher les équipements avec assignation :
+
+tsx
+const EquipmentTable = () => {  
+  const [data, setData] = useState<Equipment[]>();  
+  useEffect(() => {  
+    fetch('/api/equipment').then(res => res.json()).then(setData);  
+  }, []);  
+  return <Table columns={[...]} data={data} />;  
+};  
+4.2 Backend (Node.js/NestJS)
+Architecture :
+
+Contrôleurs → Services → Modèles  
+Sécurité :
+
+Authentification JWT stocké en HttpOnly cookies
+
+Middleware de vérification des rôles :
+
+typescript
+export const isAdmin = (req, res, next) => {  
+  if (req.user.role !== 'admin') throw new ForbiddenError();  
+  next();  
+};
+
+tu peux m'aider a le faire 
