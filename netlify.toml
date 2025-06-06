@@ -5,7 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  VITE_API_URL = "https://votre-api.netlify.app"
+  VITE_API_URL = "https://mrscorlay-parc-info-backend.vercel.app/"
 
 [[redirects]]
   from = "/*"
