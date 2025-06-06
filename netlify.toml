@@ -2,12 +2,12 @@
   base = "client"
   command = "npm install && npm run build"
   publish = "client/dist"
-  environment = { NODE_VERSION = "18" }
+
+[build.environment]
+  NODE_VERSION = "18"
+  VITE_API_URL = "https://votre-api.netlify.app"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
-
-[build.environment]
-  VITE_API_URL = "https://votre-api.netlify.app" 
+  status = 200 
