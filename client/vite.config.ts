@@ -8,7 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@shared": path.resolve(__dirname, "../shared"),
     },
   },
   server: {
@@ -21,6 +20,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    sourcemap: true,
     emptyOutDir: true,
     rollupOptions: {
       input: {
